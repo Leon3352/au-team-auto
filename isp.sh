@@ -1,6 +1,4 @@
 #!/bin/bash
-# НАСТРОЙКА ISP
-
 mkdir -p /etc/net/ifaces/ens18 /etc/net/ifaces/ens19 /etc/net/ifaces/ens20
 
 cat > /etc/net/ifaces/ens18/options <<'EOF'
@@ -35,7 +33,7 @@ EOF
 echo "net.ipv4.ip_forward = 1" >> /etc/net/sysctl.conf
 systemctl restart network
 
-apt-get update && apt-get install -y iptables sshpass
+apt-get update && apt-get install iptables -y
 
 iptables -t nat -A POSTROUTING -o ens18 -s 172.16.1.0/28 -j MASQUERADE
 iptables -t nat -A POSTROUTING -o ens18 -s 172.16.2.0/28 -j MASQUERADE
