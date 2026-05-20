@@ -1,10 +1,8 @@
 #!/bin/bash
-# НАСТРОЙКА CLI
+IFACE="ens18"
 
-IFACE="ens20"  # или ens18
-
-mkdir -p /etc/net/ifaces/$IFACE
-cat > /etc/net/ifaces/$IFACE/options <<'EOF'
+mkdir -p /etc/net/ifaces/ens18
+cat > /etc/net/ifaces/ens18/options <<'EOF'
 DISABLE=no
 TYPE=eth
 BOOTPROTO=dhcp
