@@ -1,4 +1,5 @@
 #!/bin/bash
+#sed -i 's/\r$//' isp.sh
 mkdir -p /etc/net/ifaces/ens18 /etc/net/ifaces/ens19 /etc/net/ifaces/ens20
 
 cat > /etc/net/ifaces/ens18/options <<'EOF'
