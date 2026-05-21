@@ -5,6 +5,7 @@ cat > /etc/net/ifaces/ens18/options <<'EOF'
 DISABLE=no
 TYPE=eth
 BOOTPROTO=static
+#dhcp
 CONFIG_IPV4=yes
 EOF
 cat > /etc/net/ifaces/ens18/ipv4address <<'EOF'
