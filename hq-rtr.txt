@@ -2,99 +2,105 @@ en
 conf t
 hostname hq-rtr
 ip domain-name au-team.irpo
-
 int int0
- description "to isp"
- ip address 172.16.1.4/28
-exit
+description "to isp"
+ip address 172.16.70.4/28
 port te0
- service-instance te0/int0
-  encapsulation untagged
- exit
+service-instance te0/int0
+encapsulation untagged
+exit
 exit
 int int0
- connect port te0 service-instance te0/int0
-
+connect port te0 service-instance te0/int0
 int int1
- description "to hq-srv"
- ip address 192.168.1.1/27
+description "to hq-srv"
+ip address 192.168.1.1/27
 int int2
- description "to hq-cli"
- ip address 192.168.2.1/28
+description "to hq-cli"
+ip address 192.168.2.1/28
 port te1
- service-instance te1/int1
-  encapsulation dot1q 100
-  rewrite pop 1
- exit
- service-instance te1/int2
-  encapsulation dot1q 200
-  rewrite pop 1
- exit
+service-instance te1/int1
+encapsulation dot1q 114
+rewrite pop 1
+exit
+service-instance te1/int2
+encapsulation dot1q 214
+rewrite pop 1
+exit
 exit
 int int1
- connect port te1 service-instance te1/int1
+connect port te1 service-instance te1/int1
 int int2
- connect port te1 service-instance te1/int2
+connect port te1 service-instance te1/int2
 exit
-
-ip route 0.0.0.0 0.0.0.0 172.16.1.1
-
-int int3
- ip address 192.168.99.1/29
- description "999"
-exit
-port te1
- service-instance te1/int3
-  encapsulation dot1q 999
-  rewrite pop 1
- exit
-exit
-int int3
- connect port te1 service-instance te1/int3
-
+ip route 0.0.0.0 0.0.0.0 172.16.70.1
+write memory
+conf t
 username net_admin
- role admin
- password P@ssw0rd
+role admin
+password P@ssw0rd
 exit
-
+write
+conf t
+int int3
+ip address 192.168.99.1/29
+description "814"
+exit
+port te1
+service-instance te1/int3
+encapsulation dot1q 814
+rewrite pop 1
+write
+exit
+exit
+int int3
+connect port te1 service-instance te1/int3
+write
+conf t
 int tunnel.0
- ip add 172.16.0.1/30
- ip mtu 1400
- ip tunnel 172.16.1.4 172.16.2.5 mode gre
- ip ospf authentication-key ecorouter
+ip add 172.16.0.1/30
+ip mtu 1400
+ip tunnel 172.16.70.4 172.16.80.5 mode gre
+ip ospf authentication-key ecorouter
+write
 exit
-
+exit
+ping 172.16.0.2
+conf t
 router ospf 1
- network 172.16.0.0/30 area 0
- network 192.168.1.0/27 area 0
- network 192.168.2.0/28 area 0
- passive-interface default
- no passive-interface tunnel.0
- area 0 authentication
+network 172.16.0.0/30 area 0
+network 192.168.1.0/27 area 0
+network 192.168.2.0/28 area 0
+passive-interface default
+no passive-interface tunnel.0
+area 0 authentication
 exit
-
+write
+conf t
 int int0
- ip nat outside
+ip nat outside
 int int1
- ip nat inside
+ip nat inside
 int int2
- ip nat inside
+ip nat inside
 exit
 ip nat pool NATPOOL 192.168.1.1-192.168.1.254,192.168.2.1-192.168.2.254
 ip nat source dynamic inside-to-outside pool NATPOOL overload interface int0
-
+write
+conf t
 ip pool cli_pool 192.168.2.10-192.168.2.10
 dhcp-server 1
- pool cli_pool 1
-  gateway 192.168.2.1
-  dns 192.168.1.10
-  domain-name au-team.irpo
-  mask 255.255.255.240
- exit
+pool cli_pool 1
+gateway 192.168.2.1
+dns 192.168.1.10
+domain-name au-team.irpo
+mask 255.255.255.240
+exit
 exit
 int int2
- dhcp-server 1
+dhcp-server 1
 exit
-
+write
+conf t
 ntp timezone utc+5
 write memory
